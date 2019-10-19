@@ -1,3 +1,15 @@
+#' Compile point count survey data from a directory
+#'
+#' @param dir directory containing point count survey data downloaded from CADC
+#' @param pattern regex pattern for identifying files to include (see \code{\link[base]{list.files}})
+#'
+#' @return Dataframe including all data, along with added columns converting
+#' "Distance Bin" to mindist and maxdist numeric fields.
+#' @export
+#' @import tidyr dplyr
+#' @importFrom purrr map_dfr
+#' @importFrom testthat test_that expect_false
+
 compile_PC_data <- function(dir, pattern = '.csv') {
   # get names of all files in directory that match pattern
   file_list <- list.files(here::here(dir), pattern = pattern,
@@ -12,15 +24,15 @@ compile_PC_data <- function(dir, pattern = '.csv') {
                    Researcher:`Data Status`),
               as.factor)
 
-  test_that('Missing values in critical fields', {
-    expect_false(any(is.na(dat$Project)))
-    expect_false(any(is.na(dat$`Study Area`)))
-    expect_false(any(is.na(dat$Transect)))
-    expect_false(any(is.na(dat$Point)))
-    expect_false(any(is.na(dat$Protocol)))
-    expect_false(any(is.na(dat$Spp)))
-    expect_false(any(is.na(dat$`Distance Bin ID`)))
-    expect_false(any(is.na(dat$Count)))
+  testthat::test_that('Missing values in critical fields', {
+    testthat::expect_false(any(is.na(dat$Project)))
+    testthat::expect_false(any(is.na(dat$`Study Area`)))
+    testthat::expect_false(any(is.na(dat$Transect)))
+    testthat::expect_false(any(is.na(dat$Point)))
+    testthat::expect_false(any(is.na(dat$Protocol)))
+    testthat::expect_false(any(is.na(dat$Spp)))
+    testthat::expect_false(any(is.na(dat$`Distance Bin ID`)))
+    testthat::expect_false(any(is.na(dat$Count)))
   })
 
   # convert distance bins to corresponding numeric values
