@@ -7,9 +7,7 @@
 #'
 #' @return A list containing all inputs necessary for fitting BBS-style hierarchical model.
 #' @export
-#'
-#' @examples
-#' get_BBS_model_inputs(df, 'SOSP', 'PINN')
+#' @importFrom dplyr %>%
 #'
 setup_BBS_model <- function(dat, count = 'count_max') {
   sdat <- dat %>% arrange(Transect, Point, Year)

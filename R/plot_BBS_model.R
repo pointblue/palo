@@ -1,7 +1,7 @@
 #' Plot trend results from BBS-style hierarchical model for point count survey data
 #'
-#' @param modresults model output from running fit_BBS_model
-#' @param inputdat input data from running setup_BBS_model
+#' @param modresults model output from running \code{\link[MASS]{fit_BBS_model}}
+#' @param inputdat input data from running \code{\link[MASS]{setup_BBS_model}}
 #' @param type type of plot to produce: plots of annual indices of abundance
 #' overall or by transect ('annual_overall', 'annual_transect'), plots of
 #' linear trend lines overall or by transect ('smooth_overall',
@@ -12,8 +12,10 @@
 #'
 #' @return returns ggplot
 #' @export
+#' @import ggplot2 MCMCvis
+#' @importFrom dplyr %>%
+#' @importFrom HDInterval hdi
 #'
-#' @examples
 #'
 plot_BBS_model <- function(modresults, inputdat,
                            type = 'annual+smooth_overall') {

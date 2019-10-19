@@ -9,8 +9,8 @@
 #' including zero counts where the species was not detected, and the standard
 #' error of the mean count
 #' @export
+#' @import dplyr
 #'
-#' @examples
 summarize_PC_dat <- function(df, species, project) {
 
   # format data to include surveys where count is zero,

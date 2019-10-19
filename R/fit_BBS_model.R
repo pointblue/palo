@@ -1,6 +1,6 @@
 #' Fit BBS-style hierarchical model for estimating trends in point count survey data
 #'
-#' @param inputdata inputdata created by running setup_BBS_model
+#' @param inputdata inputdata created by running \code{\link{setup_BBS_model}}
 #' @param n.adapt number of iterations for adaptation, defaults to 500
 #' @param n.update number of iterations for burn-in, defaults to 500
 #' @param n.iter number of iterations for sampling, defauts to 1000
@@ -15,8 +15,9 @@
 #' statistics from MCMCsummary and prints trace plots from MCMCplot.
 #'
 #' @export
+#' @import rjags MCMCvis
 #'
-#' @examples
+
 fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
                           n.iter = 1000, n.chains = 3,
                           overdispersion = TRUE,
