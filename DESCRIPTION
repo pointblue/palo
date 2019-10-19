@@ -2,11 +2,11 @@ Package: palo
 Type: Package
 Title: Palo Program Data Analysis
 Version: 0.1.0
-Author: Kristen Dybala
-Maintainer: Kristen Dybalar <kdybala@pointblue.org>
+Authors@R: 
+    person("Kristen", "Dybala", email = "kdybala@gmail.com", role = c("aut", "cre")
 Description: This R package contains functions useful for analysis of data 
-collected at the Palomarin Field Station and closely-associated monitoring 
-programs.
-License: What license is it under?
+    collected at the Palomarin Field Station and closely-associated monitoring 
+    programs.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
