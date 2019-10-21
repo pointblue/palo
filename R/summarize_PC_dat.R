@@ -10,6 +10,8 @@
 #' error of the mean count
 #' @export
 #' @import dplyr
+#' @importFrom rlang .data
+#' @importFrom stats sd
 #'
 summarize_PC_dat <- function(df, species, project) {
 
@@ -19,35 +21,39 @@ summarize_PC_dat <- function(df, species, project) {
   # point/year combination
   df %>%
     format_PC_dat(species, project) %>%
-    group_by(Spp, Project, Transect, Point, Year, Visit) %>%
-    summarize(Count = sum(Count)) %>%
+    group_by(.data$Spp, .data$Project, .data$Transect, .data$Point, .data$Year,
+             .data$Visit) %>%
+    summarize(Count = sum(.data$Count)) %>%
     ungroup() %>%
-    group_by(Spp, Project, Transect, Point, Year) %>%
-    summarize(n_visits = length(Count),
-              count_max = max(Count),##
-              count_mean = mean(Count),
-              count_se = sd(Count)/sqrt(n_visits))
+    group_by(.data$Spp, .data$Project, .data$Transect, .data$Point, .data$Year) %>%
+    summarize(n_visits = length(.data$Count),
+              count_max = max(.data$Count),
+              count_mean = mean(.data$Count),
+              count_se = sd(.data$Count)/sqrt(.data$n_visits))
 }
 
 format_PC_dat <- function(df, species, project) {
   # filter projects, add Year field & select relevant columns
   df <- df %>%
-    filter(Project == project) %>%
-    mutate(Year = as.numeric(format(Date, '%Y'))) %>%
-    select(Project, Transect, Point, Year, Visit, Spp,
-           Count, mindist, maxdist)
+    filter(.data$Project == project) %>%
+    mutate(Year = as.numeric(format(.data$Date, '%Y'))) %>%
+    select(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit,
+           .data$Spp, .data$Count, .data$mindist, .data$maxdist)
 
   # generate complete list of all unique surveys in the Project (regardless of
   # species), then join to subset containing species of interest; ensure data is
   # 'complete' with all surveys listed even if count is zero
   df %>%
-    select(Project, Transect, Point, Year, Visit) %>%
+    select(.data$Project, .data$Transect, .data$Point, .data$Year,
+           .data$Visit) %>%
     distinct() %>%
-    full_join(df %>% filter(Spp == species),
+    full_join(df %>% filter(.data$Spp == species),
               by = c('Project', 'Transect', 'Point', 'Year', 'Visit')) %>%
-    complete(Spp, nesting(Project, Transect, Point, Year, Visit)) %>%
-    filter(!is.na(Spp)) %>%
-    mutate(Count = case_when(is.na(Count) ~ 0,
-                             TRUE ~ Count)) %>%
-    mutate_at(vars(Project:Point, Spp), as.factor)
+    complete(.data$Spp,
+             nesting(.data$Project, .data$Transect, .data$Point, .data$Year,
+                     .data$Visit)) %>%
+    filter(!is.na(.data$Spp)) %>%
+    mutate(Count = case_when(is.na(.data$Count) ~ 0,
+                             TRUE ~ .data$Count)) %>%
+    mutate_at(vars(.data$Project:.data$Point, .data$Spp), as.factor)
 }
