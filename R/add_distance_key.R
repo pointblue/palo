@@ -5,7 +5,7 @@
 #' @return Dataframe
 #' @export
 #' @importFrom rlang .data
-#' @examples
+
 add_distance_key <- function(dat) {
   key <- dat %>%
     select(.data$Protocol, .data$`Distance Bin ID`, .data$`Distance Bin`) %>%
