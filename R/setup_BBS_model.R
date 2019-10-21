@@ -8,18 +8,19 @@
 #' @return A list containing all inputs necessary for fitting BBS-style hierarchical model.
 #' @export
 #' @importFrom dplyr %>%
+#' @importFrom rlang .data
 #'
 setup_BBS_model <- function(dat, count = 'count_max') {
-  sdat <- dat %>% arrange(Transect, Point, Year)
+  sdat <- dat %>% arrange(.data$Transect, .data$Point, .data$Year)
   year.pred <- seq(min(sdat$Year), max(sdat$Year), 1)
   prop <- sdat %>%
-    group_by(Transect, Year) %>%
-    summarize(present = sum(count_mean)) %>%
-    mutate(present = ifelse(present > 0, 1, 0)) %>%
-    group_by(Year) %>%
-    summarize(n = length(Transect),
-              n_present = sum(present),
-              prop = n_present / n) %>%
+    group_by(.data$Transect, .data$Year) %>%
+    summarize(present = sum(.data$count_mean)) %>%
+    mutate(present = ifelse(.data$present > 0, 1, 0)) %>%
+    group_by(.data$Year) %>%
+    summarize(n = length(.data$Transect),
+              n_present = sum(.data$present),
+              prop = .data$n_present / n) %>%
     ungroup()
 
   list(
@@ -30,14 +31,14 @@ setup_BBS_model <- function(dat, count = 'count_max') {
     prop = prop %>% pull(prop),
 
     # transect, point, year ID numbers associated with each Count:
-    transect = sdat %>% pull(Transect) %>% as.numeric(),
-    point = sdat %>% pull(Point) %>% as.numeric(),
-    year = sdat %>% pull(Year) %>% as.factor() %>% as.numeric(),
+    transect = sdat$Transect %>% as.numeric(),
+    point = sdat$Point %>% as.numeric(),
+    year = sdat$Year %>% as.factor() %>% as.numeric(),
 
     # number of unique IDs for each:
-    ntransects = length(unique(sdat$Transect)),
-    npoints = length(unique(sdat$Point)),
-    nyears = length(unique(sdat$Year)),
+    ntransects = sdat$Transect %>% unique() %>% length(),
+    npoints = sdat$Point %>% unique() %>% length(),
+    nyears = sdat$Year %>% unique() %>% length(),
     dat = sdat
   )
 }
