@@ -1,21 +1,24 @@
 #' Fit BBS-style hierarchical model for estimating trends in point count survey data
 #'
-#' @param inputdata inputdata created by running \code{\link{setup_BBS_model}}
-#' @param n.adapt number of iterations for adaptation, defaults to 500
-#' @param n.update number of iterations for burn-in, defaults to 500
-#' @param n.iter number of iterations for sampling, defauts to 1000
-#' @param n.chains number of MCMC chains
-#' @param overdispersion defaults to TRUE, to include a term in the model for
+#' @param inputdata Inputdata created by running \code{\link{setup_BBS_model}}
+#' @param n.adapt Number of iterations for adaptation, defaults to 500
+#' @param n.update Number of iterations for burn-in, defaults to 500
+#' @param n.iter Number of iterations for sampling, defauts to 1000
+#' @param n.chains Number of MCMC chains, defaults to 3
+#' @param overdispersion Defaults to TRUE, to include a term in the model for
 #' fitting overdispersion, as in BBS models
-#' @param randomslope defaults to FALSE, because this is not included in BBS
+#' @param randomslope Defaults to FALSE, because this is not included in BBS
 #' models; change to TRUE to include a correlated random slope by transect, in
 #' addition to a random intercept
+#' @param ... Additional arguments passed to \code{\link[rjags]{jags.model}}, e.g. initial values.
 #'
 #' @return Returns a coda.samples object from rjags. Also displays summary
 #' statistics from MCMCsummary and prints trace plots from MCMCplot.
 #'
 #' @export
-#' @import rjags MCMCvis
+#' @import rjags
+#' @importFrom stats update
+#' @importFrom MCMCvis MCMCsummary MCMCtrace
 #'
 
 fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
@@ -384,10 +387,10 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
   }
   }
 
-  jm = rjags::jags.model(file = textConnection(modelstring),
+  jm = jags.model(file = textConnection(modelstring),
                          data = inputdata[-which(names(inputdata) %in% c('year.pred', 'dat'))],
                          n.adapt = n.adapt, n.chains = n.chains, ...)
-  rjags::update.jags(jm, n.iter = n.update)
+  update(jm, n.iter = n.update)
   results = rjags::coda.samples(jm, variable.names = vars, n.iter = n.iter)
 
   MCMCvis::MCMCsummary(results,

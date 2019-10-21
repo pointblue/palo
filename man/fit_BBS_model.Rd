@@ -9,22 +9,24 @@ fit_BBS_model(inputdata, n.adapt = 500, n.update = 500,
   randomslope = FALSE, ...)
 }
 \arguments{
-\item{inputdata}{inputdata created by running \code{\link{setup_BBS_model}}}
+\item{inputdata}{Inputdata created by running \code{\link{setup_BBS_model}}}
 
-\item{n.adapt}{number of iterations for adaptation, defaults to 500}
+\item{n.adapt}{Number of iterations for adaptation, defaults to 500}
 
-\item{n.update}{number of iterations for burn-in, defaults to 500}
+\item{n.update}{Number of iterations for burn-in, defaults to 500}
 
-\item{n.iter}{number of iterations for sampling, defauts to 1000}
+\item{n.iter}{Number of iterations for sampling, defauts to 1000}
 
-\item{n.chains}{number of MCMC chains}
+\item{n.chains}{Number of MCMC chains, defaults to 3}
 
-\item{overdispersion}{defaults to TRUE, to include a term in the model for
+\item{overdispersion}{Defaults to TRUE, to include a term in the model for
 fitting overdispersion, as in BBS models}
 
-\item{randomslope}{defaults to FALSE, because this is not included in BBS
+\item{randomslope}{Defaults to FALSE, because this is not included in BBS
 models; change to TRUE to include a correlated random slope by transect, in
 addition to a random intercept}
+
+\item{...}{Additional arguments passed to \code{\link[rjags]{jags.model}}, e.g. initial values.}
 }
 \value{
 Returns a coda.samples object from rjags. Also displays summary
