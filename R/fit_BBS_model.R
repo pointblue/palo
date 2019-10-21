@@ -384,25 +384,25 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
   }
   }
 
-  jm = jags.model(file = textConnection(modelstring),
-                  data = inputdata[-which(names(inputdata) %in% c('year.pred', 'dat'))],
-                  n.adapt = n.adapt, n.chains = n.chains, ...)
-  update(jm, n.iter = n.update)
-  results = coda.samples(jm, variable.names = vars, n.iter = n.iter)
+  jm = rjags::jags.model(file = textConnection(modelstring),
+                         data = inputdata[-which(names(inputdata) %in% c('year.pred', 'dat'))],
+                         n.adapt = n.adapt, n.chains = n.chains, ...)
+  rjags::update.jags(jm, n.iter = n.update)
+  results = rjags::coda.samples(jm, variable.names = vars, n.iter = n.iter)
 
-  MCMCsummary(results,
-              params = vars[-which(vars %in% c('abund',
-                                               'abund_transect',
-                                               'count_pred',
-                                               'count_pred_transect'))]) %>%
+  MCMCvis::MCMCsummary(results,
+                       params = vars[-which(vars %in% c('abund',
+                                                        'abund_transect',
+                                                        'count_pred',
+                                                        'count_pred_transect'))]) %>%
     print()
 
-  MCMCtrace(results,
-            params = vars[-which(vars %in% c('abund',
-                                             'abund_transect',
-                                             'count_pred',
-                                             'count_pred_transect'))],
-            pdf = FALSE)
+  MCMCvis::MCMCtrace(results,
+                     params = vars[-which(vars %in% c('abund',
+                                                      'abund_transect',
+                                                      'count_pred',
+                                                      'count_pred_transect'))],
+                     pdf = FALSE)
 
   return(results)
 }
