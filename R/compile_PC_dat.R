@@ -1,7 +1,7 @@
 #' Compile point count survey data from a directory
 #'
-#' @param dir directory containing point count survey data downloaded from CADC
-#' @param pattern regex pattern for identifying files to include (see \code{\link[base]{list.files}})
+#' @param dir Directory containing point count survey data downloaded from CADC
+#' @param pattern Regex pattern for identifying files to include (see \code{\link[base]{list.files}})
 #'
 #' @return Dataframe of compiled data, excluding any rows with all NA values.
 #' @details Also tests for missing values in critical fields.
@@ -10,6 +10,7 @@
 #' @importFrom purrr map_dfr
 #' @importFrom testthat test_that expect_false
 #' @importFrom rlang .data
+#' @importFrom here here
 
 compile_PC_dat <- function(dir, pattern = '.csv') {
   # get names of all files in directory that match pattern
@@ -21,7 +22,7 @@ compile_PC_dat <- function(dir, pattern = '.csv') {
                  ~read_csv(.x,
                            col_types = 'cccccnDtttncnccccccclcccc'))
   dat <- dat %>%
-    filter_all(any_vars(!is.na(.dat))) %>%
+    filter_all(any_vars(!is.na(.data))) %>%
     mutate_at(vars(.data$Project:.data$Protocol,
                    .data$`Time Bin`,
                    .data$Spp:.data$`Breeding Status`,
