@@ -5,8 +5,7 @@
 \title{Fit BBS-style hierarchical model for estimating trends in point count survey data}
 \usage{
 fit_BBS_model(inputdata, n.adapt = 500, n.update = 500,
-  n.iter = 1000, n.chains = 3, overdispersion = TRUE,
-  randomslope = FALSE, ...)
+  n.iter = 1000, n.chains = 3, overdispersion = TRUE, ...)
 }
 \arguments{
 \item{inputdata}{Inputdata created by running \code{\link{setup_BBS_model}}}
@@ -21,10 +20,6 @@ fit_BBS_model(inputdata, n.adapt = 500, n.update = 500,
 
 \item{overdispersion}{Defaults to TRUE, to include a term in the model for
 fitting overdispersion, as in BBS models}
-
-\item{randomslope}{Defaults to FALSE, because this is not included in BBS
-models; change to TRUE to include a correlated random slope by transect, in
-addition to a random intercept}
 
 \item{...}{Additional arguments passed to \code{\link[rjags]{jags.model}}, e.g. initial values.}
 }
