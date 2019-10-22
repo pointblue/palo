@@ -9,9 +9,7 @@ setup_BBS_model(dat, count = "count_max")
 \arguments{
 \item{dat}{Dataframe or tibble containing point count data}
 
-\item{count}{Option allowing users to choose between modeling the maximum
-count on any visit to a point in a given year ('count_max'), or the mean
-across all visits ('count_mean').}
+\item{count}{Character string giving the name of the field containing the count data to be modeled.}
 }
 \value{
 A list containing all inputs necessary for fitting BBS-style hierarchical model.
