@@ -13,20 +13,20 @@ programs.
 
 ## Installation
 
-When released, you will be able to install the latest version of palo
-from [Github](https://github.com/PointBlue/palo) with:
+You can install the latest version of `palo` (in development) from
+[Github](https://github.com/PointBlue/palo) with:
 
 ``` r
 devtools::install_github("pointblue/palo")
 ```
 
-## Example
+## Example Stub
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
 # library(palo)
-## basic example code
+## basic example code to be filled in
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`?
