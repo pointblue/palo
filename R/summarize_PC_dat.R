@@ -29,7 +29,8 @@ summarize_PC_dat <- function(df, species, project) {
     summarize(n_visits = length(.data$Count),
               count_max = max(.data$Count),
               count_mean = mean(.data$Count),
-              count_se = sd(.data$Count)/sqrt(.data$n_visits))
+              count_se = sd(.data$Count)/sqrt(.data$n_visits)) %>%
+    ungroup()
 }
 
 format_PC_dat <- function(df, species, project) {
@@ -44,14 +45,12 @@ format_PC_dat <- function(df, species, project) {
   # species), then join to subset containing species of interest; ensure data is
   # 'complete' with all surveys listed even if count is zero
   df %>%
-    select(.data$Project, .data$Transect, .data$Point, .data$Year,
-           .data$Visit) %>%
+    select(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit) %>%
     distinct() %>%
     full_join(df %>% filter(.data$Spp == species),
               by = c('Project', 'Transect', 'Point', 'Year', 'Visit')) %>%
     complete(.data$Spp,
-             nesting(.data$Project, .data$Transect, .data$Point, .data$Year,
-                     .data$Visit)) %>%
+             nesting(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit)) %>%
     filter(!is.na(.data$Spp)) %>%
     mutate(Count = case_when(is.na(.data$Count) ~ 0,
                              TRUE ~ .data$Count)) %>%
