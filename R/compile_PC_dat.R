@@ -22,7 +22,7 @@ compile_PC_dat <- function(dir, pattern = '.csv') {
                  ~read_csv(.x,
                            col_types = 'cccccnDtttncnccccccclcccc'))
   dat <- dat %>%
-    filter_all(any_vars(!is.na(.data))) %>%
+    filter_all(any_vars(!is.na(.))) %>%
     mutate_at(vars(.data$Project:.data$Protocol,
                    .data$`Time Bin`,
                    .data$Spp:.data$`Breeding Status`,
@@ -39,4 +39,5 @@ compile_PC_dat <- function(dir, pattern = '.csv') {
     testthat::expect_false(any(is.na(dat$`Distance Bin ID`)))
     testthat::expect_false(any(is.na(dat$Count)))
   })
+  return(dat)
 }
