@@ -13,22 +13,18 @@
 #'
 get_BBS_model_estimates <- function(modresults, inputdat, type) {
   if (type %in% c('global_trend', 'global_index')) {
-    if (type == 'global_trend') {param = 'count_pred'}
-    if (type == 'global_index') {param = 'abund'}
-    ci <- MCMCvis::MCMCpstr(modresults, params = param,
+    ci <- MCMCvis::MCMCpstr(modresults, params = type,
                             func = function(x) HDInterval::hdi(x, .95))[[1]]
-    med <- MCMCvis::MCMCpstr(modresults, params = param, func = median)[[1]]
+    med <- MCMCvis::MCMCpstr(modresults, params = type, func = median)[[1]]
     res <- cbind(year.pred = inputdat$year.pred,
                  median = med,
                  data.frame(ci))
   } else if (type %in% c('transect_trend', 'transect_index')) {
-    if (type == 'transect_trend') {param = 'count_pred_transect'}
-    if (type == 'transect_index') {param = 'abund_transect'}
-    ci <- MCMCvis::MCMCpstr(modresults, params = param,
+    ci <- MCMCvis::MCMCpstr(modresults, params = type,
                             func = function(x) HDInterval::hdi(x, .95))[[1]]
     dimnames(ci)[[2]] <- levels(as.factor(as.character(inputdat$dat$Transect)))
 
-    med <- MCMCvis::MCMCpstr(modresults, params = param, func = median)[[1]]
+    med <- MCMCvis::MCMCpstr(modresults, params = type, func = median)[[1]]
     dimnames(med)[[2]] <- levels(as.factor(as.character(inputdat$dat$Transect)))
 
     res <- cbind(year.pred = inputdat$year.pred,
