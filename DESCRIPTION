@@ -4,9 +4,8 @@ Title: Palo Program Data Analysis
 Version: 0.1.0
 Authors@R: 
     person("Kristen", "Dybala", email = "kdybala@gmail.com", role = c("aut", "cre"))
-Description: This R package contains functions useful for analysis of data 
-    collected at the Palomarin Field Station and closely-associated monitoring 
-    programs.
+Description: This R package contains useful functions for analyzing data collected 
+    at the Palomarin Field Station and closely-associated monitoring programs.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
