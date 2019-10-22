@@ -10,7 +10,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Depends: rjags
+Depends: R (>= 2.10)
 Imports:
   MCMCvis,
   dplyr,
@@ -20,4 +20,10 @@ Imports:
   purrr,
   HDInterval,
   rlang,
-  here
+  here,
+  rjags
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/pointblue/palo
