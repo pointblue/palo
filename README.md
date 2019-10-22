@@ -7,9 +7,8 @@
 
 <!-- badges: end -->
 
-This R package contains functions useful for analysis of data collected
-at the Palomarin Field Station and closely-associated monitoring
-programs.
+This R package contains useful functions for analyzing data collected at
+the Palomarin Field Station and closely-associated monitoring programs.
 
 ## Installation
 
@@ -20,12 +19,19 @@ You can install the latest version of `palo` (in development) from
 devtools::install_github("pointblue/palo")
 ```
 
+Fitting the BBS-style hierarchical models requires also installing
+[JAGS](https://sourceforge.net/projects/mcmc-jags/files/).
+
 ## Example Stub
 
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-# library(palo)
+library(palo)
+#> Loading required package: rjags
+#> Loading required package: coda
+#> Linked to JAGS 4.3.0
+#> Loaded modules: basemod,bugs
 ## basic example code to be filled in
 ```
 
