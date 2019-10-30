@@ -1,13 +1,15 @@
 #' Format and summarize point count survey data for a given species and project code.
 #'
-#' @param df master point count data set, with dates, transects, and distances filtered
-#' @param species 4-letter species code
-#' @param project 4-letter project code
+#' @param df Data frame of point count data, with the standard field names as
+#' in the format downloaded from CADC Project Leader. Filter to include only
+#' the detection distances that should be included in the total count.
+#' @param species Character string for the 4-letter species code, in all caps
+#' @param project Character string for the 4-letter project code, in all caps
 #'
-#' @return dataframe containing all Points, Transects, and Years in the data,
-#' the number of visits, the max and mean count for the species selected,
-#' including zero counts where the species was not detected, and the standard
-#' error of the mean count
+#' @return Dataframe containing the total count (regardless of detection
+#' distance) for the selected species at each unique combination of Visit,
+#' Point, Transect, and Year in the data, including zero counts where the
+#' species was not detected.
 #' @export
 #' @import dplyr
 #' @importFrom rlang .data
@@ -16,20 +18,12 @@
 summarize_PC_dat <- function(df, species, project) {
 
   # format data to include surveys where count is zero,
-  # summarize total Count at each unique visit in case they were in separate
-  # bins, then calculate max, mean, and se of counts across visits in each
-  # point/year combination
+  # summarize total Count at each unique visit across distance bins
   df %>%
     format_PC_dat(species, project) %>%
     group_by(.data$Spp, .data$Project, .data$Transect, .data$Point, .data$Year,
              .data$Visit) %>%
     summarize(Count = sum(.data$Count)) %>%
-    ungroup() %>%
-    group_by(.data$Spp, .data$Project, .data$Transect, .data$Point, .data$Year) %>%
-    summarize(n_visits = length(.data$Count),
-              count_max = max(.data$Count),
-              count_mean = mean(.data$Count),
-              count_se = sd(.data$Count)/sqrt(.data$n_visits)) %>%
     ungroup()
 }
 

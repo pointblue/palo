@@ -7,17 +7,19 @@
 summarize_PC_dat(df, species, project)
 }
 \arguments{
-\item{df}{master point count data set, with dates, transects, and distances filtered}
+\item{df}{Data frame of point count data, with the standard field names as
+in the format downloaded from CADC Project Leader. Filter to include only
+the detection distances that should be included in the total count.}
 
-\item{species}{4-letter species code}
+\item{species}{Character string for the 4-letter species code, in all caps}
 
-\item{project}{4-letter project code}
+\item{project}{Character string for the 4-letter project code, in all caps}
 }
 \value{
-dataframe containing all Points, Transects, and Years in the data,
-the number of visits, the max and mean count for the species selected,
-including zero counts where the species was not detected, and the standard
-error of the mean count
+Dataframe containing the total count (regardless of detection
+distance) for the selected species at each unique combination of Visit,
+Point, Transect, and Year in the data, including zero counts where the
+species was not detected.
 }
 \description{
 Format and summarize point count survey data for a given species and project code.
