@@ -13,7 +13,7 @@ the detection distances that should be included in the total count.}
 
 \item{species}{Character string for the 4-letter species code, in all caps}
 
-\item{project}{Character string for the 4-letter project code, in all caps}
+\item{project}{Character string for the 4-letter project code(s), in all caps}
 }
 \value{
 Dataframe containing the total count (regardless of detection

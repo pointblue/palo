@@ -4,7 +4,7 @@
 #' in the format downloaded from CADC Project Leader. Filter to include only
 #' the detection distances that should be included in the total count.
 #' @param species Character string for the 4-letter species code, in all caps
-#' @param project Character string for the 4-letter project code, in all caps
+#' @param project Character string for the 4-letter project code(s), in all caps
 #'
 #' @return Dataframe containing the total count (regardless of detection
 #' distance) for the selected species at each unique combination of Visit,
@@ -30,7 +30,7 @@ summarize_PC_dat <- function(df, species, project) {
 format_PC_dat <- function(df, species, project) {
   # filter projects, add Year field & select relevant columns
   df <- df %>%
-    filter(.data$Project == project) %>%
+    filter(.data$Project %in% project) %>%
     mutate(Year = as.numeric(format(.data$Date, '%Y'))) %>%
     select(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit,
            .data$Spp, .data$Count, .data$mindist, .data$maxdist)
