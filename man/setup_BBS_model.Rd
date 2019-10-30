@@ -2,18 +2,19 @@
 % Please edit documentation in R/setup_BBS_model.R
 \name{setup_BBS_model}
 \alias{setup_BBS_model}
-\title{Create input data for fitting BBS-style hierarchical model for estimating trends in point count survey data}
+\title{Create input data for fitting a BBS-style hierarchical model for estimating
+trends in point count survey data}
 \usage{
-setup_BBS_model(dat, count = "count_max")
+setup_BBS_model(dat)
 }
 \arguments{
-\item{dat}{Dataframe or tibble containing point count data}
-
-\item{count}{Character string giving the name of the field containing the count data to be modeled.}
+\item{dat}{Dataframe created by \code{\link{summarize_PC_dat}}}
 }
 \value{
-A list containing all inputs necessary for fitting BBS-style hierarchical model.
+A list containing all inputs necessary for fitting BBS-style
+hierarchical model.
 }
 \description{
-Create input data for fitting BBS-style hierarchical model for estimating trends in point count survey data
+Create input data for fitting a BBS-style hierarchical model for estimating
+trends in point count survey data
 }
