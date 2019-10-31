@@ -76,19 +76,18 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     ## ANNUAL ABUNDANCE INDICES:
     for (p in 1:nprojects) {
       for (t in 1:nyears) {
-        log.index[t] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
+        log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
           0.5 * sigma.transect^2 + 0.5 * sigma.overdispersion^2
-        index[t] <- prop[t, p] * exp(log.global_index[t])
+        index[t, p] <- prop[t, p] * exp(log.index[t, p])
       }
     }
 
     ## PREDICTED VALUES:
     for (p in 1:nprojects) {
       for (i in 1:length(zyear.pred)) {
-        log(trend[i]) <- intercept[p] + slope[p] * zyear.pred[i]
+        log(trend[i, p]) <- intercept[p] + slope[p] * zyear.pred[i]
       }
     }
-
   }"
   } else if (overdispersion == FALSE) {
     vars = c('intercept', 'slope', 'sigma.year', 'sigma.transect',
@@ -134,21 +133,21 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     sigma.point ~ dunif(0, 10)
     tau.point = 1/sigma.point^2
 
-    ## ANNUAL ABUNDANCE INDICES:
-    for (p in 1:nprojects) {
-      for (t in 1:nyears) {
-        log.index[t] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
-          0.5 * sigma.transect^2
-        index[t] <- prop[t, p] * exp(log.index[t])
-      }
+  ## ANNUAL ABUNDANCE INDICES:
+  for (p in 1:nprojects) {
+    for (t in 1:nyears) {
+      log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
+        0.5 * sigma.transect^2
+      index[t, p] <- prop[t, p] * exp(log.index[t, p])
     }
+  }
 
-    ## PREDICTED VALUES:
-    for (p in 1:nprojects) {
-      for (i in 1:length(zyear.pred)) {
-        log(trend[i]) <- intercept[p] + slope[p] * zyear.pred[i]
-      }
+  ## PREDICTED VALUES:
+  for (p in 1:nprojects) {
+    for (i in 1:length(zyear.pred)) {
+      log(trend[i, p]) <- intercept[p] + slope[p] * zyear.pred[i]
     }
+  }
   }"
   }
 
@@ -159,13 +158,11 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
   results = rjags::coda.samples(jm, variable.names = vars, n.iter = n.iter)
 
   MCMCvis::MCMCsummary(results,
-                       params = vars[-which(vars %in% c('index',
-                                                        'trend'))]) %>%
+                       params = vars[-which(vars %in% c('index', 'trend'))]) %>%
     print()
 
   MCMCvis::MCMCtrace(results,
-                     params = vars[-which(vars %in% c('index',
-                                                      'trend',))],
+                     params = vars[-which(vars %in% c('index', 'trend'))],
                      pdf = FALSE)
 
   return(results)
