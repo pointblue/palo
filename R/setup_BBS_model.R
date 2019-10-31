@@ -42,8 +42,13 @@ setup_BBS_model <- function(dat) {
 
   cat('Total detections by project:\n\n')
   print(totals)
-  if (any(totals$total_count == 0)) {warning('One or more projects have zero detections of this species. For better model fit, rerun "summarize_PC_dat" and exclude this project.')}
-  if (any(totals$total_count < 100)) {warning('One or more projects have relatively few detections of this species. Model may have difficulty converging.')}
+  if (any(totals$total_count == 0)) {
+    warning('One or more projects have zero detections of this species. For
+            better model fit, rerun "summarize_PC_dat" and exclude this
+            project.')
+  } else if (any(totals$total_count < 100)) {
+      warning('One or more projects have relatively few (<100) detections of
+              this species. Model may have difficulty converging.')}
 
   list(
     observed = sdat %>% pull(Count),
