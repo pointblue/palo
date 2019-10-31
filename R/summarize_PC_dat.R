@@ -41,11 +41,12 @@ format_PC_dat <- function(df, species, project) {
   df %>%
     select(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit) %>%
     distinct() %>%
-    full_join(df %>% filter(.data$Spp == species),
+    left_join(df %>% filter(.data$Spp == species),
               by = c('Project', 'Transect', 'Point', 'Year', 'Visit')) %>%
+    mutate(Spp = replace_na(Spp, species)) %>%
     complete(.data$Spp,
              nesting(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit)) %>%
-    filter(!is.na(.data$Spp)) %>%
+    # filter(!is.na(.data$Spp)) %>%
     mutate(Count = case_when(is.na(.data$Count) ~ 0,
                              TRUE ~ .data$Count)) %>%
     mutate_at(vars(.data$Project:.data$Point, .data$Spp), as.factor)
