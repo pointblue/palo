@@ -32,7 +32,7 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     ## ecological model
     for (i in 1:length(observed)){
       log(lambda[i]) = intercept[project[i]] + slope[project[i]] * zyear[i] +
-        year_effect[year[i]] + transect_effect[transect[i]] +
+        year_effect[year[i], project[i]] + transect_effect[transect[i]] +
         point_effect[point[i]] + overdispersion[i]
 
       observed[i] ~ dpois(lambda[i])
@@ -41,9 +41,11 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
       overdispersion[i] ~ dnorm(0, tau.overdispersion)
     }
 
-    ## random year effect
-    for (t in 1:nyears){
-      year_effect[t] ~ dnorm(0, tau.year)
+    ## random year effect - variance by project
+    for (p in 1:nprojects) {
+      for (t in 1:nyears){
+        year_effect[t, p] ~ dnorm(0, tau.year[p])
+      }
     }
 
     ## random transect effect
@@ -59,10 +61,10 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     for (p in 1:nprojects) {
       intercept[p] ~ dnorm(0, 1/10000)
       slope[p] ~ dnorm(0, 1/10000)
-    }
 
-    sigma.year ~ dunif(0,10)
-    tau.year = 1/sigma.year^2
+      sigma.year[p] ~ dunif(0,10)
+      tau.year[p] = 1/sigma.year[p]^2
+    }
 
     sigma.transect ~ dunif(0, 10)
     tau.transect = 1/sigma.transect^2
@@ -76,8 +78,8 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     ## ANNUAL ABUNDANCE INDICES:
     for (p in 1:nprojects) {
       for (t in 1:nyears) {
-        log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
-          0.5 * sigma.transect^2 + 0.5 * sigma.overdispersion^2
+        log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t, p]
+        # + 0.5 * sigma.transect^2 + 0.5 * sigma.overdispersion^2
         index[t, p] <- prop[t, p] * exp(log.index[t, p])
       }
     }
@@ -98,15 +100,17 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     ## ecological model
     for (i in 1:length(observed)){
       log(lambda[i]) = intercept[project[i]] + slope[project[i]] * zyear[i] +
-        year_effect[year[i]] + transect_effect[transect[i]] +
+        year_effect[year[i], project[i]] + transect_effect[transect[i]] +
         point_effect[point[i]]
 
       observed[i] ~ dpois(lambda[i])
     }
 
     ## random year effect
-    for (t in 1:nyears){
-      year_effect[t] ~ dnorm(0, tau.year)
+    for (p in 1:nprojects) {
+      for (t in 1:nyears){
+        year_effect[t, p] ~ dnorm(0, tau.year[p])
+      }
     }
 
     ## random transect effect
@@ -122,10 +126,10 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
     for (p in 1:nprojects) {
       intercept[p] ~ dnorm(0, 1/10000)
       slope[p] ~ dnorm(0, 1/10000)
-    }
 
-    sigma.year ~ dunif(0, 10)
-    tau.year = 1/sigma.year^2
+      sigma.year[p] ~ dunif(0, 10)
+      tau.year[p] = 1/sigma.year[p]^2
+    }
 
     sigma.transect ~ dunif(0, 10)
     tau.transect = 1/sigma.transect^2
@@ -136,8 +140,8 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
   ## ANNUAL ABUNDANCE INDICES:
   for (p in 1:nprojects) {
     for (t in 1:nyears) {
-      log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t] +
-        0.5 * sigma.transect^2
+      log.index[t, p] <- intercept[p] + slope[p] * (t-1) + year_effect[t, p]
+      # + 0.5 * sigma.transect^2
       index[t, p] <- prop[t, p] * exp(log.index[t, p])
     }
   }
