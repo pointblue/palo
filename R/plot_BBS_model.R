@@ -3,11 +3,8 @@
 #' @param modresults Model output from running \code{\link{fit_BBS_model}}
 #' @param inputdat Input data from running \code{\link{setup_BBS_model}}
 #' @param type Type of plot to produce: plots of annual indices of abundance
-#' overall or by transect ('global_index', 'transect_index'), plots of
-#' linear trend lines overall or by transect ('global_trend',
-#' 'transect_trend'), or combinations of both ('global_trend+index',
-#' 'transect_trend+index'). Defaults to 'global_trend+index', similar to
-#' BBS output.
+#' ('index') or plots of the linear trend lines ('trend'), both ('both').
+#' Defaults to 'both'.
 #' @details Runs \code{\link{get_BBS_model_estimates}} and produces ggplot
 #' @return returns ggplot
 #' @export
@@ -19,18 +16,11 @@
 #' @importFrom rlang .data
 #'
 plot_BBS_model <- function(modresults, inputdat,
-                           type = 'global_trend+index') {
-  if (type == 'global_trend+index') {
-    res <- get_BBS_model_estimates(modresults, inputdat, type = 'global_index')
-    res2 <- get_BBS_model_estimates(modresults, inputdat, type = 'global_trend')
-  } else if (type == 'transect_trend+index') {
-    res <- get_BBS_model_estimates(modresults, inputdat, type = 'transect_index')
-    res2 <- get_BBS_model_estimates(modresults, inputdat, type = 'transect_trend')
-  } else {
-    res <- get_BBS_model_estimates(modresults, inputdat, type = type)
-  }
+                           type = 'both') {
+  if (type == 'both') {
+    res <- get_BBS_model_estimates(modresults, inputdat, type = 'index')
+    res2 <- get_BBS_model_estimates(modresults, inputdat, type = 'trend')
 
-  if (type %in% c('global_trend+index', 'transect_trend+index')) {
     p <- ggplot(res) +
       geom_pointrange(aes(x = .data$year.pred,
                           y = .data$median,
@@ -54,8 +44,10 @@ plot_BBS_model <- function(modresults, inputdat,
       ylab('Abundance index')
 
   } else {
+    res <- get_BBS_model_estimates(modresults, inputdat, type = type)
+
     obsdat <- data.frame(Year = inputdat$dat$Year,
-                         Transect = inputdat$dat$Transect,
+                         Project = inputdat$dat$Project,
                          Count = inputdat$observed)
     p <- ggplot(obsdat) +
       geom_jitter(aes(.data$Year, .data$Count),
@@ -74,8 +66,9 @@ plot_BBS_model <- function(modresults, inputdat,
       xlab(NULL) +
       ylab('Abundance index')
   }
-  if (type %in% c('transect_index', 'transect_trend', 'transect_trend+index')) {
-    p <- p + facet_wrap(~.data$Transect)
+
+  if (inputdat$nprojects > 1) {
+    p <- p + facet_wrap(~.data$Project)
   }
   print(p)
   return(p)
