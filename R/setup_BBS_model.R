@@ -29,17 +29,28 @@ setup_BBS_model <- function(dat) {
               n_present = sum(.data$present),
               prop = .data$n_present / n) %>%
     ungroup() %>%
-    select(-n, -n_present) %>%
-    spread(key = Project, value = prop) %>%
+    select(-.data$n, -.data$n_present) %>%
+    spread(key = .data$Project, value = .data$prop, fill = 0) %>%
+    arrange(.data$Year) %>%
+    column_to_rownames('Year') %>%
     as.matrix()
 
+  # check number of detections overall within each project
+  totals <- sdat %>%
+    group_by(.data$Project) %>%
+    summarize(total_count = sum(.data$Count))
+
+  cat('Total detections by project:\n\n')
+  print(totals)
+  if (any(totals$total_count == 0)) {warning('One or more projects have zero detections of this species. For better model fit, rerun "summarize_PC_dat" and exclude this project.')}
+  if (any(totals$total_count < 100)) {warning('One or more projects have relatively few detections of this species. Model may have difficulty converging.')}
+
   list(
-    observed = sdat %>% pull(!!count),
+    observed = sdat %>% pull(Count),
     zyear = sdat$Year - min(sdat$Year), #relative to baseline year
     year.pred = year.pred,
     zyear.pred = (year.pred - min(sdat$Year)), #values to predict for
     prop = prop,
-    effort = sdat$n_visits,
 
     # project, transect, point, year ID numbers associated with each Count:
     project = sdat$Project %>% as.numeric(),
