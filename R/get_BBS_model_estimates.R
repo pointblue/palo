@@ -3,38 +3,28 @@
 #' @param modresults Model output from running \code{\link{fit_BBS_model}}
 #' @param inputdat Input data from running \code{\link{setup_BBS_model}}
 #' @param type Type of estimates to extract: annual indices of abundance
-#' overall or by transect ('global_index', 'transect_index'), or
-#' predicted values from the linear trend overall or by transect ('global_trend',
-#' 'transect_trend').
+#' ('index'), or predicted values from the linear trend ('trend').
 #' @details This function is automatically called by \code{\link{plot_BBS_model}}, but may be useful for generating customized plots.
 #'
 #' @return Dataframe containing predicted value and HDI for each year present in inputdat$year.pred (created by \code{\link{setup_BBS_model}})
 #' @export
 #'
 get_BBS_model_estimates <- function(modresults, inputdat, type) {
-  if (type %in% c('global_trend', 'global_index')) {
-    ci <- MCMCvis::MCMCpstr(modresults, params = type,
-                            func = function(x) HDInterval::hdi(x, .95))[[1]]
-    med <- MCMCvis::MCMCpstr(modresults, params = type, func = median)[[1]]
-    res <- cbind(year.pred = inputdat$year.pred,
-                 median = med,
-                 data.frame(ci))
-  } else if (type %in% c('transect_trend', 'transect_index')) {
-    ci <- MCMCvis::MCMCpstr(modresults, params = type,
-                            func = function(x) HDInterval::hdi(x, .95))[[1]]
-    dimnames(ci)[[2]] <- levels(as.factor(as.character(inputdat$dat$Transect)))
+  ci <- MCMCvis::MCMCpstr(modresults, params = type,
+                          func = function(x) HDInterval::hdi(x, .95))[[1]]
+  dimnames(ci)[[2]] <- levels(as.factor(as.character(inputdat$dat$Project)))
 
-    med <- MCMCvis::MCMCpstr(modresults, params = type, func = median)[[1]]
-    dimnames(med)[[2]] <- levels(as.factor(as.character(inputdat$dat$Transect)))
+  med <- MCMCvis::MCMCpstr(modresults, params = type, func = median)[[1]]
+  dimnames(med)[[2]] <- levels(as.factor(as.character(inputdat$dat$Project)))
 
-    res <- cbind(year.pred = inputdat$year.pred,
-                 data.frame(med),
-                 data.frame(ci)) %>%
-      gather(-.data$year.pred, key = 'variable', value = 'value') %>%
-      separate(.data$variable, into = c('Transect', 'variable'), fill = 'right') %>%
-      mutate(variable = replace_na(.data$variable, 'median')) %>%
-      spread(key = .data$variable, value = .data$value) %>%
-      arrange(.data$Transect, .data$year.pred)
-  }
+  res <- cbind(year.pred = inputdat$year.pred,
+               data.frame(med),
+               data.frame(ci)) %>%
+    gather(-.data$year.pred, key = 'variable', value = 'value') %>%
+    separate(.data$variable, into = c('Project', 'variable'), fill = 'right') %>%
+    mutate(variable = replace_na(.data$variable, 'median')) %>%
+    spread(key = .data$variable, value = .data$value) %>%
+    arrange(.data$Project, .data$year.pred)
+
   return(res)
 }
