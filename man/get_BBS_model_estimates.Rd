@@ -4,7 +4,8 @@
 \alias{get_BBS_model_estimates}
 \title{Extract annual trend or abundance index estimates from BBS-style hierarchical model}
 \usage{
-get_BBS_model_estimates(modresults, type, projects, years)
+get_BBS_model_estimates(modresults, type, projects = NULL,
+  years = NULL)
 }
 \arguments{
 \item{modresults}{Model output from running \code{\link{fit_BBS_model}}}
