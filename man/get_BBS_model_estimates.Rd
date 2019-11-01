@@ -4,24 +4,27 @@
 \alias{get_BBS_model_estimates}
 \title{Extract annual trend or abundance index estimates from BBS-style hierarchical model}
 \usage{
-get_BBS_model_estimates(modresults, inputdat, type)
+get_BBS_model_estimates(modresults, type, projects, years)
 }
 \arguments{
 \item{modresults}{Model output from running \code{\link{fit_BBS_model}}}
 
-\item{inputdat}{Input data from running \code{\link{setup_BBS_model}}}
-
 \item{type}{Type of estimates to extract: annual indices of abundance
 ('index'), or predicted values from the linear trend ('trend').}
+
+\item{projects}{Character string for the 4-letter project code(s), in all caps}
+
+\item{years}{Numeric vector for 4-digit years. See details.}
 }
 \value{
-Dataframe containing predicted value and HDI for each year present
-in inputdat$year.pred (created by \code{\link{setup_BBS_model}})
+Dataframe containing predicted value and 95% credible interval for each year
 }
 \description{
 Extract annual trend or abundance index estimates from BBS-style hierarchical model
 }
 \details{
-This function is automatically called by \code{\link{plot_BBS_model}},
-but may be useful for generating customized plots.
+The BBS model output does not explicitly keep track of which years
+are included in each model, but keeps them in order. For type = 'index',
+provide a vector of years that are actually included in the original data.
+For type = 'trend', provide the full list of years between the earliest and last.
 }
