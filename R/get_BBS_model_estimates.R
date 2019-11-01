@@ -12,6 +12,9 @@
 #' For type = 'trend', provide the full list of years between the earliest and last.
 #' @return Dataframe containing predicted value and 95% credible interval for each year
 #' @export
+#' @importFrom MCMCvis MCMCpstr
+#' @importFrom stats quantile
+#' @importFrom dplyr %>%
 #'
 get_BBS_model_estimates <- function(modresults, type, projects = NULL, years = NULL) {
 
@@ -30,7 +33,7 @@ get_BBS_model_estimates <- function(modresults, type, projects = NULL, years = N
 
     res <- as.data.frame(est) %>%
       mutate(Year = years) %>%
-      pivot_longer(-Year, names_to = 'variable', values_to = 'value') %>%
+      pivot_longer(-.data$Year, names_to = 'variable', values_to = 'value') %>%
       separate(.data$variable, into = c('Project', 'variable'), sep = 4, fill = 'right') %>%
       mutate(variable = case_when(variable == '.50%' ~ 'median',
                                   variable == '.2.5%' ~ 'lower',

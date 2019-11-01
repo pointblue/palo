@@ -13,7 +13,6 @@
 #' @export
 #' @import dplyr
 #' @importFrom rlang .data
-#' @importFrom stats sd
 #'
 summarize_PC_dat <- function(df, species, project) {
 
