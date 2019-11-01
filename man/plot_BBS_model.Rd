@@ -4,7 +4,7 @@
 \alias{plot_BBS_model}
 \title{Plot trend results from BBS-style hierarchical model for point count survey data}
 \usage{
-plot_BBS_model(modresults, inputdat, type = "global_trend+index")
+plot_BBS_model(modresults, inputdat, type = "both")
 }
 \arguments{
 \item{modresults}{Model output from running \code{\link{fit_BBS_model}}}
@@ -12,11 +12,8 @@ plot_BBS_model(modresults, inputdat, type = "global_trend+index")
 \item{inputdat}{Input data from running \code{\link{setup_BBS_model}}}
 
 \item{type}{Type of plot to produce: plots of annual indices of abundance
-overall or by transect ('global_index', 'transect_index'), plots of
-linear trend lines overall or by transect ('global_trend',
-'transect_trend'), or combinations of both ('global_trend+index',
-'transect_trend+index'). Defaults to 'global_trend+index', similar to
-BBS output.}
+('index') or plots of the linear trend lines ('trend'), both ('both').
+Defaults to 'both'.}
 }
 \value{
 returns ggplot

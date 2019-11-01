@@ -12,16 +12,16 @@ get_BBS_model_estimates(modresults, inputdat, type)
 \item{inputdat}{Input data from running \code{\link{setup_BBS_model}}}
 
 \item{type}{Type of estimates to extract: annual indices of abundance
-overall or by transect ('global_index', 'transect_index'), or
-predicted values from the linear trend overall or by transect ('global_trend',
-'transect_trend').}
+('index'), or predicted values from the linear trend ('trend').}
 }
 \value{
-Dataframe containing predicted value and HDI for each year present in inputdat$year.pred (created by \code{\link{setup_BBS_model}})
+Dataframe containing predicted value and HDI for each year present
+in inputdat$year.pred (created by \code{\link{setup_BBS_model}})
 }
 \description{
 Extract annual trend or abundance index estimates from BBS-style hierarchical model
 }
 \details{
-This function is automatically called by \code{\link{plot_BBS_model}}, but may be useful for generating customized plots.
+This function is automatically called by \code{\link{plot_BBS_model}},
+but may be useful for generating customized plots.
 }
