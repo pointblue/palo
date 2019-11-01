@@ -1,13 +1,14 @@
 #' Fit BBS-style hierarchical model for estimating trends in point count survey data
 #'
 #' @param inputdata Inputdata created by running \code{\link{setup_BBS_model}}
-#' @param n.adapt Number of iterations for adaptation, defaults to 500
-#' @param n.update Number of iterations for burn-in, defaults to 500
-#' @param n.iter Number of iterations for sampling, defauts to 1000
+#' @param n.adapt Number of iterations for adaptation, defaults to 1000
+#' @param n.burnin Number of iterations for burn-in, defaults to 5000
+#' @param n.sample Number of iterations for sampling, defauts to 10000
 #' @param n.chains Number of MCMC chains, defaults to 3
 #' @param overdispersion Defaults to TRUE, to include a term in the model for
 #' fitting overdispersion, as in BBS models
-#' @param ... Additional arguments passed to \code{\link[rjags]{jags.model}}, e.g. initial values.
+#' @param ... Additional arguments passed to \code{\link[rjags]{jags.model}},
+#' e.g. initial values.
 #'
 #' @return Returns a coda.samples object from rjags. Also displays summary
 #' statistics from MCMCsummary and prints trace plots from MCMCplot.
@@ -18,8 +19,8 @@
 #' @importFrom MCMCvis MCMCsummary MCMCtrace
 #'
 
-fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
-                          n.iter = 1000, n.chains = 3,
+fit_BBS_model <- function(inputdata, n.adapt = 1000, n.burnin = 5000,
+                          n.sample = 10000, n.chains = 3,
                           overdispersion = TRUE,
                           ...) {
 
@@ -155,11 +156,26 @@ fit_BBS_model <- function(inputdata, n.adapt = 500, n.update = 500,
   }"
   }
 
-  jm = jags.model(file = textConnection(modelstring),
+  # results = runjags::run.jags(model = modelstring,
+  #                             monitor = vars,
+  #                             data = inputdata[-which(names(inputdata) %in% c('year.pred', 'dat'))],
+  #                             n.chains = n.chains,
+  #                             adapt = n.adapt,
+  #                             burnin = n.burnin,
+  #                             sample = n.sample,
+  #                             modules = c('glm'),
+  #                             method = method,
+  #                             ...)
+
+  load.module('glm')
+
+  jm = rjags::jags.model(file = textConnection(modelstring),
                          data = inputdata[-which(names(inputdata) %in% c('year.pred', 'dat'))],
-                         n.adapt = n.adapt, n.chains = n.chains, ...)
-  update(jm, n.iter = n.update)
-  results = rjags::coda.samples(jm, variable.names = vars, n.iter = n.iter)
+                         n.adapt = n.adapt,
+                         n.chains = n.chains,
+                         ...)
+  update(jm, n.iter = n.burnin)
+  results = rjags::coda.samples(jm, variable.names = vars, n.iter = n.sample, thin = 1)
 
   MCMCvis::MCMCsummary(results,
                        params = vars[-which(vars %in% c('index', 'trend'))]) %>%

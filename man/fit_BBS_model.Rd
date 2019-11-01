@@ -4,24 +4,25 @@
 \alias{fit_BBS_model}
 \title{Fit BBS-style hierarchical model for estimating trends in point count survey data}
 \usage{
-fit_BBS_model(inputdata, n.adapt = 500, n.update = 500,
-  n.iter = 1000, n.chains = 3, overdispersion = TRUE, ...)
+fit_BBS_model(inputdata, n.adapt = 1000, n.burnin = 5000,
+  n.sample = 10000, n.chains = 3, overdispersion = TRUE, ...)
 }
 \arguments{
 \item{inputdata}{Inputdata created by running \code{\link{setup_BBS_model}}}
 
-\item{n.adapt}{Number of iterations for adaptation, defaults to 500}
+\item{n.adapt}{Number of iterations for adaptation, defaults to 1000}
 
-\item{n.update}{Number of iterations for burn-in, defaults to 500}
+\item{n.burnin}{Number of iterations for burn-in, defaults to 5000}
 
-\item{n.iter}{Number of iterations for sampling, defauts to 1000}
+\item{n.sample}{Number of iterations for sampling, defauts to 10000}
 
 \item{n.chains}{Number of MCMC chains, defaults to 3}
 
 \item{overdispersion}{Defaults to TRUE, to include a term in the model for
 fitting overdispersion, as in BBS models}
 
-\item{...}{Additional arguments passed to \code{\link[rjags]{jags.model}}, e.g. initial values.}
+\item{...}{Additional arguments passed to \code{\link[rjags]{jags.model}},
+e.g. initial values.}
 }
 \value{
 Returns a coda.samples object from rjags. Also displays summary
