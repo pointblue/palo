@@ -8,6 +8,7 @@
 #' @export
 #' @importFrom dplyr %>%
 #' @importFrom rlang .data
+#' @importFrom tibble column_to_rownames
 #'
 setup_BBS_model <- function(dat) {
   sdat <- dat %>%
@@ -32,7 +33,7 @@ setup_BBS_model <- function(dat) {
     select(-.data$n, -.data$n_present) %>%
     spread(key = .data$Project, value = .data$prop, fill = 0) %>%
     arrange(.data$Year) %>%
-    column_to_rownames('Year') %>%
+    tibble::column_to_rownames('Year') %>%
     as.matrix()
 
   # check number of detections overall within each project
@@ -51,7 +52,7 @@ setup_BBS_model <- function(dat) {
               this species. Model may have difficulty converging.')}
 
   list(
-    observed = sdat %>% pull(Count),
+    observed = sdat$Count,
     zyear = sdat$Year - min(sdat$Year), #relative to baseline year
     year.pred = year.pred,
     zyear.pred = (year.pred - min(sdat$Year)), #values to predict for

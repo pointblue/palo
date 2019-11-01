@@ -42,7 +42,7 @@ format_PC_dat <- function(df, species, project) {
     distinct() %>%
     left_join(df %>% filter(.data$Spp == species),
               by = c('Project', 'Transect', 'Point', 'Year', 'Visit')) %>%
-    mutate(Spp = replace_na(Spp, species)) %>%
+    mutate(Spp = replace_na(.data$Spp, species)) %>%
     complete(.data$Spp,
              nesting(.data$Project, .data$Transect, .data$Point, .data$Year, .data$Visit)) %>%
     # filter(!is.na(.data$Spp)) %>%

@@ -21,7 +21,8 @@ Imports:
   HDInterval,
   rlang,
   here,
-  rjags
+  rjags,
+  tibble
 Suggests: 
     knitr,
     rmarkdown
