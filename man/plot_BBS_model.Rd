@@ -4,16 +4,13 @@
 \alias{plot_BBS_model}
 \title{Plot trend results from BBS-style hierarchical model for point count survey data}
 \usage{
-plot_BBS_model(modresults, inputdat, type = "both")
+plot_BBS_model(df, type = "both")
 }
 \arguments{
-\item{modresults}{Model output from running \code{\link{fit_BBS_model}}}
-
-\item{inputdat}{Input data from running \code{\link{setup_BBS_model}}}
+\item{df}{Summary of median, lower, and upper estimates from \code{\link{get_BBS_model_estimates}}}
 
 \item{type}{Type of plot to produce: plots of annual indices of abundance
-('index') or plots of the linear trend lines ('trend'), both ('both').
-Defaults to 'both'.}
+('index') or plots of the linear trend lines ('trend'), both ('both'). Defaults to 'both'.}
 }
 \value{
 returns ggplot
@@ -22,5 +19,5 @@ returns ggplot
 Plot trend results from BBS-style hierarchical model for point count survey data
 }
 \details{
-Runs \code{\link{get_BBS_model_estimates}} and produces ggplot
+Produces line and ribbon for trend estimates, and points with error bars for index estimates.
 }
