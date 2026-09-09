@@ -10,7 +10,7 @@ add_distance_key(dat)
 \item{dat}{Dataframe containing the field 'Distance Bin'}
 }
 \value{
-Dataframe
+tibble
 }
 \description{
 Convert Distance Bins to numeric mindist and maxdist fields
