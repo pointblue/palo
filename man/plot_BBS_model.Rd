@@ -16,8 +16,5 @@ plot_BBS_model(df, type = "both")
 returns ggplot
 }
 \description{
-Plot trend results from BBS-style hierarchical model for point count survey data
-}
-\details{
-Produces line and ribbon for trend estimates, and points with error bars for index estimates.
+Produces line and ribbon for trend estimates, and points with error bars for index estimates using \pkg{ggplot2}. Install it with: \code{install.packages("ggplot2")}
 }
