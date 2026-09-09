@@ -4,8 +4,7 @@
 \alias{get_BBS_model_estimates}
 \title{Extract annual trend or abundance index estimates from BBS-style hierarchical model}
 \usage{
-get_BBS_model_estimates(modresults, type, projects = NULL,
-  years = NULL)
+get_BBS_model_estimates(modresults, type, projects = NULL, years = NULL)
 }
 \arguments{
 \item{modresults}{Model output from running \code{\link{fit_BBS_model}}}
@@ -21,7 +20,7 @@ get_BBS_model_estimates(modresults, type, projects = NULL,
 Dataframe containing predicted value and 95% credible interval for each year
 }
 \description{
-Extract annual trend or abundance index estimates from BBS-style hierarchical model
+Uses \pkg{MCMCvis} to summarize posterior distributions. Install it with: \code{install.packages("MCMCvis")}
 }
 \details{
 The BBS model output does not explicitly keep track of which years
