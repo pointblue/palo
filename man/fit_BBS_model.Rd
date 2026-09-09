@@ -4,8 +4,17 @@
 \alias{fit_BBS_model}
 \title{Fit BBS-style hierarchical model for estimating trends in point count survey data}
 \usage{
-fit_BBS_model(inputdata, n.adapt = 1000, n.burnin = 5000,
-  n.sample = 10000, n.chains = 3, overdispersion = TRUE, ...)
+fit_BBS_model(
+  inputdata,
+  n.adapt = 1000,
+  n.burnin = 5000,
+  n.sample = 10000,
+  n.chains = 3,
+  overdispersion = TRUE,
+  print = TRUE,
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{inputdata}{Inputdata created by running \code{\link{setup_BBS_model}}}
@@ -21,6 +30,10 @@ fit_BBS_model(inputdata, n.adapt = 1000, n.burnin = 5000,
 \item{overdispersion}{Defaults to TRUE, to include a term in the model for
 fitting overdispersion, as in BBS models}
 
+\item{print}{if TRUE, print table summarizing results}
+
+\item{plot}{if TRUE, plot traceplots}
+
 \item{...}{Additional arguments passed to \code{\link[rjags]{jags.model}},
 e.g. initial values.}
 }
@@ -29,5 +42,8 @@ Returns a coda.samples object from rjags. Also displays summary
 statistics from MCMCsummary and prints trace plots from MCMCplot.
 }
 \description{
-Fit BBS-style hierarchical model for estimating trends in point count survey data
+Uses \pkg{rjags} to fit a hierarchical model to point count data to estimate trends in a single species' abundance over time, with support for simultaneous estimation of separate overall trends for one or more "project" areas (e.g. POGO vs. PINN), with each project including many point count stations grouped into transects. Models include random intercepts for year within project, transects, and points. Optionally, models can also include a term for fitting overdispersion. Install \pkg{rjags} with: \code{install.packages("rjags")}
+}
+\details{
+If plot = TRUE or print = TRUE, uses \pkg{MCMCvis} to plot traceplots and print a results summary table. Install it with: \code{install.packages("MCMCvis")}
 }
