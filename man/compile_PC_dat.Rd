@@ -9,7 +9,7 @@ compile_PC_dat(dir, pattern = ".csv")
 \arguments{
 \item{dir}{Directory containing point count survey data downloaded from CADC}
 
-\item{pattern}{Regex pattern for identifying files to include (see \code{\link[base]{list.files}})}
+\item{pattern}{Regex pattern for identifying files to include (see [base::list.files()])}
 }
 \value{
 Dataframe of compiled data, excluding any rows with all NA values.
