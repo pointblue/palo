@@ -16,11 +16,8 @@ the detection distances that should be included in the total count.}
 \item{project}{Character string for the 4-letter project code(s), in all caps}
 }
 \value{
-Dataframe containing the total count (regardless of detection
-distance) for the selected species at each unique combination of Visit,
-Point, Transect, and Year in the data, including zero counts where the
-species was not detected.
+Dataframe
 }
 \description{
-Format and summarize point count survey data for a given species and project code.
+Returns the total count (regardless of detection distance) for the selected species at each unique combination of Visit, Point, Transect, and Year in the data, including zero counts where the species was not detected.
 }
