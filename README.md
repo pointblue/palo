@@ -23,11 +23,10 @@ devtools::install_github("pointblue/palo")
 Fitting the BBS-style hierarchical models requires also installing
 [JAGS](https://sourceforge.net/projects/mcmc-jags/files/).
 
-## Example
+## Examples
 
-This is a basic example which shows you how to solve a common problem of
-compiling and summarizing multiple point count data files downloaded
-from the [AKN](https://avianknowledge.net).
+Compiling and summarizing multiple point count data files downloaded
+from the [AKN](https://avianknowledge.net):
 
 ``` r
 library(palo)
@@ -45,6 +44,36 @@ data_filtered = data_compiled |>
 SOSP_data = summarize_PC_dat(df = data_filtered,
                              species = 'SOSP',
                              project = 'PINN')
+```
+
+Calculating capture rate statistics from banding data:
+
+``` r
+library(palo)
+
+data(sample_band) # sample banding data
+data(sample_nethrs) # sample net hours data
+
+# First summarize capture totals, optionally for a subset of banding stations
+# and species, and by a specified time frame. In this case, use by = 'season' to
+# use default definitions of spring, fall, and winter seasons. (See
+# ?summarize_capture_stats() for more information about how to create custom
+# seasons or to summarize by month or year instead.)
+capturedat = summarize_capture_stats(
+   df = sample_band, location = c('MUHO', 'RECR'),
+   species = c('SWTH', 'AMGO'), by = 'season', winter_adjust = FALSE)
+
+# Also summarize net hours totals, for the same banding stations and using the
+# same seasonal groupings.
+effortdat = summarize_nethrs_stats(
+   df = sample_nethrs, location = c('MUHO', 'RECR'),
+   by = 'season', winter_adjust = FALSE)
+
+# Then join them together to calculate capture rates, optionally by species (vs
+# combined) and appending overall annual capture rate statistics as well.
+capture_stats = calculate_capture_rates(
+  captures = capturedat, effort = effortdat, by_species = TRUE,
+  add_annual = TRUE)
 ```
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
