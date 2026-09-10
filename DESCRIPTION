@@ -19,10 +19,13 @@ Imports:
   tibble,
   tidyr
 Suggests: 
+    foreign,
     ggplot2,
     knitr,
     rmarkdown,
     rjags,
-    MCMCvis
+    MCMCvis,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/pointblue/palo
+Config/testthat/edition: 3
